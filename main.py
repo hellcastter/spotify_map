@@ -1,11 +1,10 @@
 """ Spotify Map """
-import os
 import json
 import pycountry
 from flask import render_template, Flask, request
 from spotify_api import get_available_markets, get_top_song, search
 
-with open(os.path.abspath('countries.json'), 'r', encoding='utf-8') as file:
+with open('./countries.json', 'r', encoding='utf-8') as file:
     COUNTRIES = json.load(file)
 
 app = Flask(__name__)

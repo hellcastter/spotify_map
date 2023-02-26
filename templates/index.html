@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+    <link href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet">
+    <title>Top tracks</title>
+</head>
+<body>
+    <section class="wrapper">
+        <form action="#" method="get" class="form">
+            <input type="text" name="artist" id="artist" placeholder="Enter artist" required>
+            <button type="submit">Get top track!</button>
+        </form>
+
+        <a href="" target="_blank" class="song"></a>
+    </section>
+
+    <section id="map"></section>
+
+
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+    <script>
+        const form = document.querySelector('.form');
+        const song = document.querySelector('.song')
+
+        const map = L.map('map', {
+            center: [51.505, -0.09],
+            zoom: 2
+        });
+
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        let countries_layer = null;
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            artist = form.querySelector('#artist').value;
+
+            if (countries_layer) {
+                map.removeLayer(countries_layer);
+            }
+
+            fetch('/markets', {
+                headers: {"content-type": "application/json"},
+                method: "POST",
+                body: JSON.stringify({artist})
+            })
+
+            .then((response) => response.json())
+            .then((data) => {
+                song.textContent = `${data.artist} — ${data.name}`;
+                song.href = data.url;
+
+                countries_map = data.countries.map((country) => {
+                    const {name, flag, longitude, latitude} = country;
+                    return L.marker([latitude, longitude]).bindPopup(`${flag} ${name}`)
+                });
+
+                countries_layer = L.layerGroup(countries_map);
+                countries_layer.addTo(map)
+            });
+        });
+    </script>
+</body>
+</html>

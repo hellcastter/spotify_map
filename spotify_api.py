@@ -90,7 +90,15 @@ def get_top_song(artist_id: str) -> str:
     return top_track_id
 
 
-def get_available_markets(song_id: str):
+def get_available_markets(song_id: str) -> list:
+    """get available markets for songs
+
+    Args:
+        song_id (str): song id
+
+    Returns:
+        list: list of countries codes
+    """
     url = f"https://api.spotify.com/v1/tracks/{song_id}/"
     song = get(url)
 

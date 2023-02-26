@@ -1,24 +1,17 @@
 """ Spotify Map """
+import os
 import json
-from fastapi import FastAPI, Request
-from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
 import pycountry
+from flask import render_template, Flask, request
 from spotify_api import get_available_markets, get_top_song, search
 
-with open('countries.json', 'r', encoding='utf-8') as file:
+with open(os.path.abspath('countries.json'), 'r', encoding='utf-8') as file:
     COUNTRIES = json.load(file)
 
-app = FastAPI()
-templates = Jinja2Templates(directory="templates")
+app = Flask(__name__)
 
-
-app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="templates")
-
-
-@app.get("/")
-def read_root(request: Request):
+@app.route("/")
+def read_root():
     """get index page
 
     Args:
@@ -27,11 +20,11 @@ def read_root(request: Request):
     Returns:
         _TemplateResponse index.html
     """
-    return templates.TemplateResponse('index.html', {"request": request})
+    return render_template('index.html')
 
-    
+
 @app.post("/markets")
-async def get_markets(request: Request):
+async def get_markets():
     """get available markets for the song
 
     Args:
@@ -40,7 +33,7 @@ async def get_markets(request: Request):
     Returns:
         list: list of markets
     """
-    result = await request.json()
+    result = request.json
     artist = result['artist']
 
     artist_id = await search(artist, 'artist', 1)
@@ -78,3 +71,6 @@ async def get_markets(request: Request):
         })
 
     return response
+
+if __name__ == "__main__":
+    app.run()

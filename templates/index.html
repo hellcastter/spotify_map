@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
-    <link href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='/styles.css') }}" rel="stylesheet">
     <title>Top tracks</title>
 </head>
 <body>
@@ -39,7 +39,9 @@
 
         form.addEventListener('submit', (event) => {
             event.preventDefault();
-            artist = form.querySelector('#artist').value;
+            artist = form.querySelector('#artist').value.strip();
+
+            if (!artist) return;
 
             if (countries_layer) {
                 map.removeLayer(countries_layer);
@@ -50,7 +52,6 @@
                 method: "POST",
                 body: JSON.stringify({artist})
             })
-
             .then((response) => response.json())
             .then((data) => {
                 song.textContent = `${data.artist} — ${data.name}`;
@@ -63,6 +64,9 @@
 
                 countries_layer = L.layerGroup(countries_map);
                 countries_layer.addTo(map)
+            })
+            .catch((error) => {
+                song.textContent = "Something went wrong. Try again.";
             });
         });
     </script>

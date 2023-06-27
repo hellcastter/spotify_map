@@ -2,7 +2,7 @@
 
 ## About project
 
-This project detects top track of artist and shows in map where that track is available. This is really tricky and easy way to get top tracks.
+This project detects the top track of the artist and shows on the map where that track is available. This is really tricky and easy way to get top tracks. (Done for the course Basics of Programming at Ukrainian Catholic University)
 
 ## Result example
 
@@ -12,12 +12,12 @@ You can try web site here [hellcaster.pythonanywhere.com](https://hellcaster.pyt
 
 ## Installation and start
 
-To start project do following commands:
+To start the project do the following commands:
 
 ### Install requirements
 
-1. Clone the repository and open folder in terminal.
-2. Create virtual enviroment and install requirements:
+1. Clone the repository and open the folder in the terminal.
+2. Create a virtual environment and install requirements:
 
 ```cmd
 python3 -m venv venv
@@ -34,9 +34,9 @@ pip3 install requirements.txt
 python3 main.py
 ```
 
-You will see in which port application will start in terminal.
+You will see at which port the application will start in the terminal.
 
-**IMPORTANT:** you will also need a Spotify Secret code and key. Get it in [developer.spotify.com](https://developer.spotify.com).
+**IMPORTANT:** You will also need a Spotify Secret code and key. Get it in [developer.spotify.com](https://developer.spotify.com).
 
 ### Determinate
 
